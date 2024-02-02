@@ -44,7 +44,7 @@ const LoginScreen = () => {
         </View>
       </KeyboardAvoidingView>
 
-      <View style={{ marginTop: 70 }}>
+      <View style={{ marginTop: 40 }}>
         <View
           style={{
             flexDirection: "row",
