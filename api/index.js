@@ -74,6 +74,10 @@ app.post("/register", async (req, res) => {
     }
     // criar novo usuário
     const newUser = new User({ name, email, password });
+    res.status(201).json({
+      message:
+        "Usuário registrado com sucesso, verifique o email para confirmar o registro",
+    });
 
     // gerar e guardar o verification token
     newUser.verificationToken = crypto.randomBytes(20).toString("hex");
@@ -110,5 +114,40 @@ app.get("/verify/:token", async (req, res) => {
     res.status(200).json({ message: "Email verificado com Sucesso!" });
   } catch (error) {
     res.status(500).json({ message: "Falha na verificação do email" });
+  }
+});
+
+//gerando o secretkey do jsonwebtoken com a funcao generatesecretkey
+
+const generateSecretKey = () => {
+  const secretKey = crypto.randomBytes(32).toString("hex");
+
+  return secretKey;
+};
+
+const secretKey = generateSecretKey();
+
+//endpoint para fazer o login do usuario
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    //verificar se o usuário existe
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(401).json({ message: "Email ou senha inválidos" });
+    }
+
+    //verificar se o password está correto
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Email ou senha inválidos" });
+    }
+    // generate token
+    const token = jwt.sign({ userId: user.id }, secretKey);
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).json({ message: "Falha no Login" });
   }
 });

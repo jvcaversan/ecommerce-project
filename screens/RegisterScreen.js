@@ -22,30 +22,31 @@ const RegisterScreen = () => {
   const navigation = useNavigation();
 
   const handleRegister = async () => {
+    // console.log("Register button clicked");
+
     const user = {
       name: name,
       email: email,
       password: password,
     };
 
-    //enviar uma req post para o backend para registrar usuário
+    // console.log("User data:", user);
 
-    await axios
-      .post("http://localhost:8000/register", user)
-      .then((response) => {
-        console.log(response);
-        Alert.alert(
-          "Registro efetuado com sucesso",
-          "Seu cadastro foi concluido"
-        );
-        setName("");
-        setEmail("");
-        setPassword("");
-      })
-      .catch((error) => {
-        Alert.alert("Falha ao registrar", "Tente novamente");
-        console.log("Falha no registro", error);
-      });
+    try {
+      const response = await axios.post("http://localhost:8000/register", user);
+      // console.log("Server response:", response.data);
+
+      Alert.alert(
+        "Registro efetuado com sucesso",
+        "Seu cadastro foi concluído"
+      );
+      setName("");
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      Alert.alert("Falha ao registrar", "Tente novamente");
+      console.log("Falha no registro", error);
+    }
   };
 
   return (
