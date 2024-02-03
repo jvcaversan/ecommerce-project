@@ -7,17 +7,46 @@ import {
   Image,
   Pressable,
   TextInput,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+
+  const handleRegister = async () => {
+    const user = {
+      name: name,
+      email: email,
+      password: password,
+    };
+
+    //enviar uma req post para o backend para registrar usuário
+
+    await axios
+      .post("http://localhost:8000/register", user)
+      .then((response) => {
+        console.log(response);
+        Alert.alert(
+          "Registro efetuado com sucesso",
+          "Seu cadastro foi concluido"
+        );
+        setName("");
+        setEmail("");
+        setPassword("");
+      })
+      .catch((error) => {
+        Alert.alert("Falha ao registrar", "Tente novamente");
+        console.log("Falha no registro", error);
+      });
+  };
 
   return (
     <SafeAreaView
@@ -157,6 +186,7 @@ const RegisterScreen = () => {
           <View style={{ marginTop: 50 }} />
 
           <Pressable
+            onPress={handleRegister}
             style={{
               width: 200,
               backgroundColor: "#FEBE10",
