@@ -8,16 +8,19 @@ import {
   View,
   Image,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { SliderBox } from "react-native-image-slider-box";
 import {
   AntDesign,
   Feather,
   Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { SliderBox } from "react-native-image-slider-box";
 import axios from "axios";
+import ProductItem from "../components/ProductItem";
+import DropDownPicker from "react-native-dropdown-picker";
+import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
   const list = [
@@ -189,7 +192,16 @@ const HomeScreen = () => {
       size: "8GB RAM, 128GB Storage",
     },
   ];
+  const navigation = useNavigation();
   const [products, setProducts] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [category, setCategory] = useState("joias");
+  const [items, setItems] = useState([
+    { label: "Roupas Masculinas", value: "men's clothing" },
+    { label: "Joias", value: "jewelery" },
+    { label: "Eletrônicos", value: "electronics" },
+    { label: "Roupas Femininas", value: "women's clothing" },
+  ]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -201,7 +213,10 @@ const HomeScreen = () => {
     };
     fetchData();
   }, []);
-  console.log("products", products);
+
+  const onGenderOpen = useCallback(() => {
+    setCompanyOpen(false);
+  }, []);
   return (
     <SafeAreaView
       style={{
@@ -307,13 +322,14 @@ const HomeScreen = () => {
             <Pressable
               key={index}
               style={{
-                marginVertical: 10,
+                marginVertical: 7,
+                marginHorizontal: 5,
                 flexDirection: "row",
                 flexWrap: "wrap",
               }}
             >
               <Image
-                style={{ width: 180, height: 180, resizeMode: "contain" }}
+                style={{ width: 200, height: 200, resizeMode: "contain" }}
                 source={{ uri: item?.image }}
               />
             </Pressable>
@@ -334,6 +350,18 @@ const HomeScreen = () => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {offers.map((item, index) => (
             <Pressable
+              onPress={() =>
+                navigation.navigate("Info", {
+                  id: item.id,
+                  title: item.title,
+                  price: item?.price,
+                  carousel: item.carouselImages,
+                  color: item?.color,
+                  size: item?.size,
+                  oldPrice: item?.oldPrice,
+                  item: item,
+                })
+              }
               key={index}
               style={{
                 marginVertical: 10,
@@ -364,15 +392,15 @@ const HomeScreen = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  {item?.offer} Off
+                  {item?.offer} Desconto
                 </Text>
               </View>
             </Pressable>
           ))}
         </ScrollView>
-        <Text style={{ paddingTop: 10, fontSize: 18, fontWeight: "bold" }}>
-          Promoções do Dia
-        </Text>
+        <Text
+          style={{ paddingTop: 10, fontSize: 18, fontWeight: "bold" }}
+        ></Text>
         <Text
           style={{
             height: 1,
@@ -380,7 +408,41 @@ const HomeScreen = () => {
             borderWidth: 2,
             marginTop: 15,
           }}
-        ></Text>
+        />
+        <DropDownPicker
+          style={{
+            borderColor: "#B7B7B7",
+            height: 30,
+            marginTop: 20,
+            width: "45%",
+            marginBottom: open ? 120 : 15,
+          }}
+          open={open}
+          value={category}
+          items={items}
+          setOpen={setOpen}
+          setValue={setCategory}
+          setItems={setItems}
+          placeholder="Escolha a categoria"
+          placeholderStyle={styles.placeholderStyles}
+          onOpen={onGenderOpen}
+          // onChangeValue = {onChange}
+          zIndex={3000}
+          zIndexInverse={1000}
+        />
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          {products
+            ?.filter((item) => item.category === category)
+            .map((item, index) => (
+              <ProductItem key={index} item={item} />
+            ))}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
