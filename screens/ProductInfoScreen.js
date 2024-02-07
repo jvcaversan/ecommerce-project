@@ -174,7 +174,7 @@ const ProductInfoScreen = () => {
 
       <View style={{ padding: 10 }}>
         <Text style={{ fontSize: 15, fontWeight: "bold", marginVertical: 5 }}>
-          Total: {route.params.price}
+          Total: R${route.params.price}
         </Text>
         <Text style={{ color: "#00CED1" }}>
           Entrega GRÁTIS amanhã até as 15:00 se comprar até as 10:00
@@ -193,6 +193,36 @@ const ProductInfoScreen = () => {
           </Text>
         </View>
       </View>
+      <Text style={{ color: "green", marginHorizontal: 10, fontWeight: 500 }}>
+        Em Estoque
+      </Text>
+      <Pressable
+        style={{
+          backgroundColor: "#FFC72C",
+          padding: 10,
+          borderRadius: 20,
+          justifyContent: "center",
+          alignItems: "center",
+          marginHorizontal: 10,
+          marginVertical: 10,
+        }}
+      >
+        <Text>Adicionar ao carrinho</Text>
+      </Pressable>
+
+      <Pressable
+        style={{
+          backgroundColor: "#FFAC1C",
+          padding: 10,
+          borderRadius: 20,
+          justifyContent: "center",
+          alignItems: "center",
+          marginHorizontal: 10,
+          marginVertical: 7,
+        }}
+      >
+        <Text>Comprar agora</Text>
+      </Pressable>
     </ScrollView>
   );
 };
