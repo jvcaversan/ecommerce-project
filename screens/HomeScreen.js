@@ -195,7 +195,7 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const [products, setProducts] = useState([]);
   const [open, setOpen] = useState(false);
-  const [category, setCategory] = useState("joias");
+  const [category, setCategory] = useState("jewelery");
   const [items, setItems] = useState([
     { label: "Roupas Masculinas", value: "men's clothing" },
     { label: "Joias", value: "jewelery" },
@@ -355,10 +355,11 @@ const HomeScreen = () => {
                   id: item.id,
                   title: item.title,
                   price: item?.price,
-                  carousel: item.carouselImages,
+                  carouselImages: item.carouselImages,
                   color: item?.color,
                   size: item?.size,
                   oldPrice: item?.oldPrice,
+                  offer: item?.offer,
                   item: item,
                 })
               }
