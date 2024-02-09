@@ -16,12 +16,14 @@ import {
   Feather,
   Ionicons,
   MaterialIcons,
+  Entypo,
 } from "@expo/vector-icons";
 import axios from "axios";
 import ProductItem from "../components/ProductItem";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
+import { BottomModal, ModalContent, SlideAnimation } from "react-native-modals";
 
 const HomeScreen = () => {
   const list = [
@@ -220,248 +222,337 @@ const HomeScreen = () => {
   }, []);
 
   const cart = useSelector((state) => state.cart.cart);
+  const [modalVisible, setModalVisible] = useState(false);
   return (
-    <SafeAreaView
-      style={{
-        paddingTop: Platform.OS === "android" ? 40 : 0,
-        flex: 1,
-        backgroundColor: "white",
-      }}
-    >
-      <ScrollView>
-        <View
-          style={{
-            backgroundColor: "#00cde1",
-            padding: 10,
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <Pressable
+    <>
+      <SafeAreaView
+        style={{
+          paddingTop: Platform.OS === "android" ? 40 : 0,
+          flex: 1,
+          backgroundColor: "white",
+        }}
+      >
+        <ScrollView>
+          <View
             style={{
+              backgroundColor: "#00cde1",
+              padding: 10,
               flexDirection: "row",
               alignItems: "center",
-              marginHorizontal: 7,
-              gap: 10,
-              backgroundColor: "white",
-              borderRadius: 3,
-              height: 38,
-              flex: 1,
             }}
           >
-            <AntDesign
-              style={{ paddingLeft: 10 }}
-              name="search1"
-              size={22}
-              color={"black"}
-            />
-            <TextInput placeholderTextColor={"black"} placeholder="Buscar" />
-          </Pressable>
-          <Feather name="mic" size={24} color={"black"} />
-        </View>
-        <View
-          style={{
-            backgroundColor: "#AFEEEE",
-            padding: 10,
-            gap: 5,
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <Ionicons name="location-outline" size={24} color={"black"} />
-          <Pressable>
-            <Text style={{ fontSize: 15, fontWeight: 500 }}>
-              Entrega em Vitória-ES 29070-440
-            </Text>
-          </Pressable>
-          <MaterialIcons name="keyboard-arrow-down" size={24} color={"black"} />
-        </View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {list.map((item, index) => (
             <Pressable
-              key={index}
               style={{
-                margin: 10,
-                justifyContent: "center",
+                flexDirection: "row",
                 alignItems: "center",
+                marginHorizontal: 7,
+                gap: 10,
+                backgroundColor: "white",
+                borderRadius: 3,
+                height: 38,
+                flex: 1,
               }}
             >
-              <Image
-                style={{ width: 50, height: 50, resizeMode: "contain" }}
-                source={{ uri: item.image }}
+              <AntDesign
+                style={{ paddingLeft: 10 }}
+                name="search1"
+                size={22}
+                color={"black"}
               />
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: 12,
-                  fontWeight: 500,
-                  marginTop: 5,
-                }}
-              >
-                {item?.name}
+              <TextInput placeholderTextColor={"black"} placeholder="Buscar" />
+            </Pressable>
+            <Feather name="mic" size={24} color={"black"} />
+          </View>
+          <Pressable
+            onPress={() => setModalVisible(!modalVisible)}
+            style={{
+              backgroundColor: "#AFEEEE",
+              padding: 10,
+              gap: 5,
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Ionicons name="location-outline" size={24} color={"black"} />
+            <Pressable>
+              <Text style={{ fontSize: 15, fontWeight: 500 }}>
+                Entrega em Vitória-ES 29070-440
               </Text>
             </Pressable>
-          ))}
-        </ScrollView>
-        <SliderBox
-          images={images}
-          autoPlay
-          circleLoop
-          dotColor={"#13274F"}
-          inactiveDotColor={"#90A4AE"}
-          ImageComponentStyle={{ width: "100%" }}
-        />
-        <Text style={{ paddingTop: 10, fontSize: 18, fontWeight: "bold" }}>
-          Promoções da Semana
-        </Text>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          {deals.map((item, index) => (
-            <Pressable
-              onPress={() =>
-                navigation.navigate("Info", {
-                  id: item.id,
-                  title: item.title,
-                  price: item?.price,
-                  carouselImages: item.carouselImages,
-                  color: item?.color,
-                  size: item?.size,
-                  oldPrice: item?.oldPrice,
-                  offer: item?.offer,
-                  item: item,
-                })
-              }
-              key={index}
-              style={{
-                marginVertical: 7,
-                marginHorizontal: 5,
-                flexDirection: "row",
-                flexWrap: "wrap",
-              }}
-            >
-              <Image
-                style={{ width: 200, height: 200, resizeMode: "contain" }}
-                source={{ uri: item?.image }}
-              />
-            </Pressable>
-          ))}
-        </View>
-        <Text
-          style={{
-            height: 1,
-            borderColor: "#D0D0D0",
-            borderWidth: 2,
-            marginTop: 15,
-          }}
-        ></Text>
-        <Text style={{ paddingTop: 10, fontSize: 18, fontWeight: "bold" }}>
-          Promoções do Dia
-        </Text>
-
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {offers.map((item, index) => (
-            <Pressable
-              onPress={() =>
-                navigation.navigate("Info", {
-                  id: item.id,
-                  title: item.title,
-                  price: item?.price,
-                  carouselImages: item.carouselImages,
-                  color: item?.color,
-                  size: item?.size,
-                  oldPrice: item?.oldPrice,
-                  offer: item?.offer,
-                  item: item,
-                })
-              }
-              key={index}
-              style={{
-                marginVertical: 10,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Image
-                style={{ width: 150, height: 150, resizeMode: "contain" }}
-                source={{ uri: item?.image }}
-              />
-              <View
+            <MaterialIcons
+              name="keyboard-arrow-down"
+              size={24}
+              color={"black"}
+            />
+          </Pressable>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {list.map((item, index) => (
+              <Pressable
+                key={index}
                 style={{
-                  backgroundColor: "#E31837",
-                  paddingVertical: 5,
-                  width: 130,
+                  margin: 10,
                   justifyContent: "center",
                   alignItems: "center",
-                  marginTop: 10,
-                  borderRadius: 4,
                 }}
               >
+                <Image
+                  style={{ width: 50, height: 50, resizeMode: "contain" }}
+                  source={{ uri: item.image }}
+                />
                 <Text
                   style={{
                     textAlign: "center",
-                    color: "white",
-                    fontSize: 13,
-                    fontWeight: "bold",
+                    fontSize: 12,
+                    fontWeight: 500,
+                    marginTop: 5,
                   }}
                 >
-                  {item?.offer} Desconto
+                  {item?.name}
                 </Text>
-              </View>
-            </Pressable>
-          ))}
-        </ScrollView>
-        <Text
-          style={{ paddingTop: 10, fontSize: 18, fontWeight: "bold" }}
-        ></Text>
-        <Text
-          style={{
-            height: 1,
-            borderColor: "#D0D0D0",
-            borderWidth: 2,
-            marginTop: 15,
-          }}
-        />
-        <DropDownPicker
-          style={{
-            borderColor: "#B7B7B7",
-            height: 30,
-            marginTop: 20,
-            width: "45%",
-            marginBottom: open ? 120 : 15,
-          }}
-          open={open}
-          value={category}
-          items={items}
-          setOpen={setOpen}
-          setValue={setCategory}
-          setItems={setItems}
-          placeholder="Escolha a categoria"
-          placeholderStyle={styles.placeholderStyles}
-          onOpen={onGenderOpen}
-          // onChangeValue = {onChange}
-          zIndex={3000}
-          zIndexInverse={1000}
-        />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          {products
-            ?.filter((item) => item.category === category)
-            .map((item, index) => (
-              <ProductItem key={index} item={item} />
+              </Pressable>
             ))}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          </ScrollView>
+          <SliderBox
+            images={images}
+            autoPlay
+            circleLoop
+            dotColor={"#13274F"}
+            inactiveDotColor={"#90A4AE"}
+            ImageComponentStyle={{ width: "100%" }}
+          />
+          <Text style={{ paddingTop: 10, fontSize: 18, fontWeight: "bold" }}>
+            Promoções da Semana
+          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            {deals.map((item, index) => (
+              <Pressable
+                onPress={() =>
+                  navigation.navigate("Info", {
+                    id: item.id,
+                    title: item.title,
+                    price: item?.price,
+                    carouselImages: item.carouselImages,
+                    color: item?.color,
+                    size: item?.size,
+                    oldPrice: item?.oldPrice,
+                    offer: item?.offer,
+                    item: item,
+                  })
+                }
+                key={index}
+                style={{
+                  marginVertical: 7,
+                  marginHorizontal: 5,
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                }}
+              >
+                <Image
+                  style={{ width: 200, height: 200, resizeMode: "contain" }}
+                  source={{ uri: item?.image }}
+                />
+              </Pressable>
+            ))}
+          </View>
+          <Text
+            style={{
+              height: 1,
+              borderColor: "#D0D0D0",
+              borderWidth: 2,
+              marginTop: 15,
+            }}
+          ></Text>
+          <Text style={{ paddingTop: 10, fontSize: 18, fontWeight: "bold" }}>
+            Promoções do Dia
+          </Text>
+
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {offers.map((item, index) => (
+              <Pressable
+                onPress={() =>
+                  navigation.navigate("Info", {
+                    id: item.id,
+                    title: item.title,
+                    price: item?.price,
+                    carouselImages: item.carouselImages,
+                    color: item?.color,
+                    size: item?.size,
+                    oldPrice: item?.oldPrice,
+                    offer: item?.offer,
+                    item: item,
+                  })
+                }
+                key={index}
+                style={{
+                  marginVertical: 10,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Image
+                  style={{ width: 150, height: 150, resizeMode: "contain" }}
+                  source={{ uri: item?.image }}
+                />
+                <View
+                  style={{
+                    backgroundColor: "#E31837",
+                    paddingVertical: 5,
+                    width: 130,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: 10,
+                    borderRadius: 4,
+                  }}
+                >
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      color: "white",
+                      fontSize: 13,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {item?.offer} Desconto
+                  </Text>
+                </View>
+              </Pressable>
+            ))}
+          </ScrollView>
+          <Text
+            style={{ paddingTop: 10, fontSize: 18, fontWeight: "bold" }}
+          ></Text>
+          <Text
+            style={{
+              height: 1,
+              borderColor: "#D0D0D0",
+              borderWidth: 2,
+              marginTop: 15,
+            }}
+          />
+          <DropDownPicker
+            style={{
+              borderColor: "#B7B7B7",
+              height: 30,
+              marginTop: 20,
+              width: "45%",
+              marginBottom: open ? 120 : 15,
+            }}
+            open={open}
+            value={category}
+            items={items}
+            setOpen={setOpen}
+            setValue={setCategory}
+            setItems={setItems}
+            placeholder="Escolha a categoria"
+            placeholderStyle={styles.placeholderStyles}
+            onOpen={onGenderOpen}
+            // onChangeValue = {onChange}
+            zIndex={3000}
+            zIndexInverse={1000}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            {products
+              ?.filter((item) => item.category === category)
+              .map((item, index) => (
+                <ProductItem key={index} item={item} />
+              ))}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+
+      <BottomModal
+        onBackdropPress={() => setModalVisible(!modalVisible)}
+        swipeDirection={["up", "down"]}
+        swipeThreshold={200}
+        modalAnimation={
+          new SlideAnimation({
+            slideFrom: "bottom",
+          })
+        }
+        onHardwareBackPress={() => setModalVisible(!modalVisible)}
+        visible={modalVisible}
+        onTouchOutside={() => setModalVisible(!modalVisible)}
+      >
+        <ModalContent style={{ width: "100%", height: 400 }}>
+          <View>
+            <Text style={{ fontSize: 16, fontWeight: 500 }}>
+              Escolha seu endereço
+            </Text>
+            <Text style={{ marginTop: 5, fontSize: 16, color: "gray" }}>
+              Escolha o local para ver os produtos disponíveis e opções de
+              entrega
+            </Text>
+          </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {/* ja adicionou os endereços */}
+
+            <Pressable
+              style={{
+                width: 140,
+                height: 140,
+                borderColor: "#D0D0D0",
+                marginTop: 10,
+                borderWidth: 1,
+                padding: 10,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  color: "#0066b2",
+                  fontWeight: 500,
+                }}
+              >
+                Adicione um endereço ou marque sua localização
+              </Text>
+            </Pressable>
+          </ScrollView>
+
+          <View style={{ flexDirection: "column", gap: 7, marginBottom: 30 }}>
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
+            >
+              <Entypo name="location-pin" size={22} color={"#0066b2"} />
+              <Text style={{ color: "#0066b2", fontWeight: 500 }}>
+                Insira seu CEP
+              </Text>
+            </View>
+
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
+            >
+              <Ionicons name="locate-sharp" size={22} color={"#0066b2"} />
+              <Text style={{ color: "#0066b2", fontWeight: 500 }}>
+                Usar minha localização atual
+              </Text>
+            </View>
+
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
+            >
+              <AntDesign name="earth" size={22} color={"#0066b2"} />
+              <Text style={{ color: "#0066b2", fontWeight: 500 }}>
+                Entregar fora do Brasil
+              </Text>
+            </View>
+          </View>
+        </ModalContent>
+      </BottomModal>
+    </>
   );
 };
 
