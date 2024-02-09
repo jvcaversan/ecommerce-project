@@ -3,20 +3,19 @@ import {
   Text,
   ScrollView,
   Pressable,
-  TextInput,
   ImageBackground,
   Dimensions,
 } from "react-native";
 import React, { useState } from "react";
 import {
   AntDesign,
-  Feather,
   MaterialCommunityIcons,
   Ionicons,
 } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/CartReducer";
+import Header from "../components/Header";
 
 const ProductInfoScreen = () => {
   const route = useRoute();
@@ -41,36 +40,7 @@ const ProductInfoScreen = () => {
       style={{ marginTop: 50, flex: 1, backgroundColor: "white" }}
       showsVerticalScrollIndicator={false}
     >
-      <View
-        style={{
-          backgroundColor: "#00cde1",
-          padding: 10,
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <Pressable
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginHorizontal: 7,
-            gap: 10,
-            backgroundColor: "white",
-            borderRadius: 3,
-            height: 38,
-            flex: 1,
-          }}
-        >
-          <AntDesign
-            style={{ paddingLeft: 10 }}
-            name="search1"
-            size={22}
-            color={"black"}
-          />
-          <TextInput placeholderTextColor={"black"} placeholder="Buscar" />
-        </Pressable>
-        <Feather name="mic" size={24} color={"black"} />
-      </View>
+      <Header />
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {route.params.carouselImages?.map((item, index) => (

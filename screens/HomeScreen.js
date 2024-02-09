@@ -4,26 +4,20 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   View,
   Image,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SliderBox } from "react-native-image-slider-box";
-import {
-  AntDesign,
-  Feather,
-  Ionicons,
-  MaterialIcons,
-  Entypo,
-} from "@expo/vector-icons";
+import { AntDesign, Ionicons, MaterialIcons, Entypo } from "@expo/vector-icons";
 import axios from "axios";
 import ProductItem from "../components/ProductItem";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { BottomModal, ModalContent, SlideAnimation } from "react-native-modals";
+import Header from "../components/Header";
 
 const HomeScreen = () => {
   const list = [
@@ -233,36 +227,7 @@ const HomeScreen = () => {
         }}
       >
         <ScrollView>
-          <View
-            style={{
-              backgroundColor: "#00cde1",
-              padding: 10,
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <Pressable
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginHorizontal: 7,
-                gap: 10,
-                backgroundColor: "white",
-                borderRadius: 3,
-                height: 38,
-                flex: 1,
-              }}
-            >
-              <AntDesign
-                style={{ paddingLeft: 10 }}
-                name="search1"
-                size={22}
-                color={"black"}
-              />
-              <TextInput placeholderTextColor={"black"} placeholder="Buscar" />
-            </Pressable>
-            <Feather name="mic" size={24} color={"black"} />
-          </View>
+          <Header />
           <Pressable
             onPress={() => setModalVisible(!modalVisible)}
             style={{
@@ -499,6 +464,10 @@ const HomeScreen = () => {
             {/* ja adicionou os endereços */}
 
             <Pressable
+              onPress={() => {
+                setModalVisible(false);
+                navigation.navigate("Address");
+              }}
               style={{
                 width: 140,
                 height: 140,
