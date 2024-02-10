@@ -9,6 +9,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Entypo, AntDesign, Ionicons } from "@expo/vector-icons";
 import ProductInfoScreen from "../screens/ProductInfoScreen";
 import AddAddressScreen from "../screens/AddAddressScreen";
+import AddressScreen from "../screens/AddressScreen";
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -93,6 +94,11 @@ const StackNavigator = () => {
         <Stack.Screen
           name="Address"
           component={AddAddressScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AddressScreen"
+          component={AddressScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
