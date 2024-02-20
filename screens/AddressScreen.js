@@ -20,7 +20,7 @@ const AddressScreen = () => {
   const navigation = useNavigation();
   const [name, setName] = useState("");
   const [mobileNo, setmobileNo] = useState("");
-  const [address, setAddress] = useState("");
+  const [fullAddress, setFullAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [zipcode, setZipcode] = useState("");
@@ -35,11 +35,13 @@ const AddressScreen = () => {
     };
     fetchUser();
   }, []);
+  console.log(userId);
   const handleAddAddress = () => {
+    console.log("Função handleAddAddress chamada");
     const address = {
       name,
       mobileNo,
-      address,
+      fullAddress,
       city,
       state,
       zipcode,
@@ -50,7 +52,7 @@ const AddressScreen = () => {
         Alert.alert("Sucesso", "Endereço adicionado com Sucesso");
         setName("");
         setmobileNo("");
-        setAddress("");
+        setFullAddress("");
         setCity("");
         setState("");
         setZipcode("");
@@ -65,7 +67,6 @@ const AddressScreen = () => {
       });
   };
 
-  console.log(userId);
   return (
     <ScrollView style={{ marginTop: 50 }}>
       <Header />
@@ -84,7 +85,10 @@ const AddressScreen = () => {
         />
         <RegisterInputs
           value={name}
-          onChangeText={(text) => setName(text)}
+          onChangeText={(text) => {
+            setName(text);
+            console.log("Novo valor do nome:", text);
+          }}
           additionalStyle={{ marginVertical: 10 }}
           desc={"Nome Completo"}
           placeHolderDesc={"Insira seu nome"}
@@ -96,8 +100,8 @@ const AddressScreen = () => {
           placeHolderDesc={"Insira seu número de telefone"}
         />
         <RegisterInputs
-          value={address}
-          onChangeText={(text) => setAddress(text)}
+          value={fullAddress}
+          onChangeText={(text) => setFullAddress(text)}
           additionalStyle={{ marginVertical: 10 }}
           desc={"Endereço"}
           placeHolderDesc={"Insira seu endereço"}

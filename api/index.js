@@ -175,10 +175,6 @@ app.post("/enderecos", async (req, res) => {
   }
 });
 
-app.post("/endereços", async (req, res) => {
-  res.redirect("/enderecos");
-});
-
 //endpoint para pegar todos os endereços de um usuario
 
 app.get("/enderecos/:userId", async (req, res) => {
@@ -194,8 +190,4 @@ app.get("/enderecos/:userId", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Erro ao tentar acessar os endereços" });
   }
-});
-
-app.get("/endereços/:userId", async (req, res) => {
-  res.redirect("/enderecos/:userId");
 });
