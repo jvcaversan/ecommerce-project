@@ -23,12 +23,11 @@ const userSchema = new mongoose.Schema({
     {
       name: String,
       mobileNo: String,
-      houseNo: String,
-      street: String,
-      landMark: String,
+      address: String,
       city: String,
+      state: String,
+      zipcode: String,
       country: String,
-      postalCode: String,
     },
   ],
 

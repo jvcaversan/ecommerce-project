@@ -151,3 +151,51 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ message: "Falha no Login" });
   }
 });
+
+//endpoint para armazenar novo endereço no backend
+app.post("/enderecos", async (req, res) => {
+  try {
+    const { userId, address } = req.body;
+
+    //encontrar o userId
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Usuário não encontrado!" });
+    }
+
+    //adiconar o novo endereço ao array de endereços do usuario
+    user.addresses.push(address);
+
+    //salvar o usuario atualizado no backend
+    await user.save();
+
+    res.status(200).json({ message: "Endereço criado com Sucesso" });
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao adicionar o endereço" });
+  }
+});
+
+app.post("/endereços", async (req, res) => {
+  res.redirect("/enderecos");
+});
+
+//endpoint para pegar todos os endereços de um usuario
+
+app.get("/enderecos/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+    const address = user.addresses;
+    res.status(200).json({ address });
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao tentar acessar os endereços" });
+  }
+});
+
+app.get("/endereços/:userId", async (req, res) => {
+  res.redirect("/enderecos/:userId");
+});
