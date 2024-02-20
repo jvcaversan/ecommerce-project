@@ -10,6 +10,7 @@ import React, { useEffect, useState, useContext } from "react";
 import Header from "../components/Header";
 import RegisterInputs from "../components/RegisterInputs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import "core-js/stable/atob";
 import { jwtDecode } from "jwt-decode";
 import { UserType } from "../UserContext";
 import axios from "axios";
