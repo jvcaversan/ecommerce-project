@@ -498,15 +498,48 @@ const HomeScreen = () => {
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {address?.map((item, index) => (
-              <Pressable key={index}>
+              <Pressable
+                key={index}
+                style={{
+                  width: 140,
+                  height: 140,
+                  borderColor: "#D0D0D0",
+                  borderWidth: 1,
+                  padding: 10,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 3,
+                  marginRight: 15,
+                  marginTop: 10,
+                }}
+              >
                 <View
                   style={{ flexDirection: "row", alignItems: "center", gap: 3 }}
                 >
-                  <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                  <Text style={{ fontSize: 13, fontWeight: "bold" }}>
                     {item?.name}
                   </Text>
                   <Entypo name="location-pin" size={24} color="red" />
                 </View>
+
+                <Text
+                  numberOfLines={1}
+                  style={{ width: 130, fontSize: 13, textAlign: "center" }}
+                >
+                  {item?.fullAddress}
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  style={{ width: 130, fontSize: 13, textAlign: "center" }}
+                >
+                  {item?.city}
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  style={{ width: 130, fontSize: 13, textAlign: "center" }}
+                >
+                  {item?.state}
+                </Text>
               </Pressable>
             ))}
 
@@ -519,11 +552,11 @@ const HomeScreen = () => {
                 width: 140,
                 height: 140,
                 borderColor: "#D0D0D0",
-                marginTop: 10,
                 borderWidth: 1,
                 padding: 10,
                 justifyContent: "center",
                 alignItems: "center",
+                marginTop: 10,
               }}
             >
               <Text
