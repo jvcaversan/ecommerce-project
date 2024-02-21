@@ -7,7 +7,7 @@ import {
   View,
   Image,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SliderBox } from "react-native-image-slider-box";
 import { AntDesign, Ionicons, MaterialIcons, Entypo } from "@expo/vector-icons";
@@ -18,6 +18,10 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { BottomModal, ModalContent, SlideAnimation } from "react-native-modals";
 import Header from "../components/Header";
+import { UserType } from "../UserContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import "core-js/stable/atob";
+import { jwtDecode } from "jwt-decode";
 
 const HomeScreen = () => {
   const list = [
@@ -199,6 +203,9 @@ const HomeScreen = () => {
     { label: "Eletrônicos", value: "electronics" },
     { label: "Roupas Femininas", value: "women's clothing" },
   ]);
+  const [address, setAddress] = useState([]);
+
+  const { userId, setUserId } = useContext(UserType);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -217,6 +224,35 @@ const HomeScreen = () => {
 
   const cart = useSelector((state) => state.cart.cart);
   const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    if (userId) {
+      fetchAddress();
+    }
+  }, [userId, modalVisible]);
+  const fetchAddress = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/enderecos/${userId}`
+      );
+      const { address } = response.data;
+
+      setAddress(address);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = await AsyncStorage.getItem("authToken");
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.userId;
+      setUserId(userId);
+    };
+    fetchUser();
+  }, []);
+
+  console.log("address", address);
   return (
     <>
       <SafeAreaView
@@ -461,7 +497,18 @@ const HomeScreen = () => {
             </Text>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {/* ja adicionou os endereços */}
+            {address?.map((item, index) => (
+              <Pressable key={index}>
+                <View
+                  style={{ flexDirection: "row", alignItems: "center", gap: 3 }}
+                >
+                  <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                    {item?.name}
+                  </Text>
+                  <Entypo name="location-pin" size={24} color="red" />
+                </View>
+              </Pressable>
+            ))}
 
             <Pressable
               onPress={() => {
