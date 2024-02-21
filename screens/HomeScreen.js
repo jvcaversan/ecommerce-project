@@ -204,6 +204,8 @@ const HomeScreen = () => {
     { label: "Roupas Femininas", value: "women's clothing" },
   ]);
   const [address, setAddress] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState("");
+  console.log(selectedAddress);
 
   const { userId, setUserId } = useContext(UserType);
   useEffect(() => {
@@ -252,7 +254,7 @@ const HomeScreen = () => {
     fetchUser();
   }, []);
 
-  console.log("address", address);
+  // console.log("address", address);
   return (
     <>
       <SafeAreaView
@@ -276,9 +278,16 @@ const HomeScreen = () => {
           >
             <Ionicons name="location-outline" size={24} color={"black"} />
             <Pressable>
-              <Text style={{ fontSize: 15, fontWeight: 500 }}>
-                Entrega em Vitória-ES 29070-440
-              </Text>
+              {selectedAddress ? (
+                <Text>
+                  Entregar para {selectedAddress.name} -{" "}
+                  {selectedAddress.fullAddress}
+                </Text>
+              ) : (
+                <Text style={{ fontSize: 13, fontWeight: 500 }}>
+                  Adicionar Endereço
+                </Text>
+              )}
             </Pressable>
             <MaterialIcons
               name="keyboard-arrow-down"
@@ -499,6 +508,7 @@ const HomeScreen = () => {
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {address?.map((item, index) => (
               <Pressable
+                onPress={() => setSelectedAddress(item)}
                 key={index}
                 style={{
                   width: 140,
@@ -511,6 +521,8 @@ const HomeScreen = () => {
                   gap: 3,
                   marginRight: 15,
                   marginTop: 10,
+                  backgroundColor:
+                    selectedAddress === item ? "#FBCEB1" : "white",
                 }}
               >
                 <View
