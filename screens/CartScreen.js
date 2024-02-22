@@ -1,8 +1,9 @@
 import { View, Text, ScrollView, Pressable, Image } from "react-native";
 import React from "react";
 import Header from "../components/Header";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { AntDesign, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { decrementQuantity, incrementQuantity } from "../redux/CartReducer";
 
 const CartScreen = () => {
   const cart = useSelector((state) => state.cart.cart);
@@ -11,6 +12,16 @@ const CartScreen = () => {
   const total = cart
     ?.map((item) => item.price * item.quantity)
     .reduce((curr, prev) => curr + prev, 0);
+
+  const dispatch = useDispatch();
+
+  const increaseQuantity = (item) => {
+    dispatch(incrementQuantity(item));
+  };
+
+  const decreaseQuantity = (item) => {
+    dispatch(decrementQuantity(item));
+  };
   return (
     <ScrollView style={{ marginTop: 55, flex: 1, backgroundColor: "white" }}>
       <Header />
@@ -109,6 +120,7 @@ const CartScreen = () => {
                 }}
               >
                 <Pressable
+                  onPress={() => decreaseQuantity(item)}
                   style={{
                     backgroundColor: "#D8D8D8",
                     padding: 7,
@@ -134,6 +146,7 @@ const CartScreen = () => {
                 </Pressable>
 
                 <Pressable
+                  onPress={() => increaseQuantity(item)}
                   style={{
                     backgroundColor: "#D8D8D8",
                     padding: 7,
