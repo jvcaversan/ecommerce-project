@@ -3,9 +3,16 @@ import React from "react";
 import Header from "../components/Header";
 import { useSelector, useDispatch } from "react-redux";
 import { AntDesign, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import { decrementQuantity, incrementQuantity } from "../redux/CartReducer";
+import {
+  decrementQuantity,
+  incrementQuantity,
+  removeFromCart,
+} from "../redux/CartReducer";
+import { useNavigation } from "@react-navigation/native";
 
 const CartScreen = () => {
+  const navigation = useNavigation();
+
   const cart = useSelector((state) => state.cart.cart);
   console.log(cart);
 
@@ -22,6 +29,10 @@ const CartScreen = () => {
   const decreaseQuantity = (item) => {
     dispatch(decrementQuantity(item));
   };
+
+  const deleteItem = (item) => {
+    dispatch(removeFromCart(item));
+  };
   return (
     <ScrollView style={{ marginTop: 55, flex: 1, backgroundColor: "white" }}>
       <Header />
@@ -32,6 +43,7 @@ const CartScreen = () => {
       <Text style={{ marginHorizontal: 10 }}>Mais detalhes disponíveis</Text>
 
       <Pressable
+        onPress={() => navigation.navigate("ConfirmationScreen")}
         style={{
           backgroundColor: "#FFC72C",
           padding: 10,
@@ -120,19 +132,47 @@ const CartScreen = () => {
                 }}
               >
                 <Pressable
-                  onPress={() => decreaseQuantity(item)}
                   style={{
-                    backgroundColor: "#D8D8D8",
-                    padding: 7,
-                    borderTopLeftRadius: 6,
-                    borderBottomLeftRadius: 6,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 10,
+                    paddingVertical: 5,
+                    borderRadius: 7,
                   }}
                 >
-                  <MaterialCommunityIcons
-                    name="minus"
-                    size={24}
-                    color={"black"}
-                  />
+                  {item.quantity > 1 ? (
+                    <Pressable
+                      onPress={() => decreaseQuantity(item)}
+                      style={{
+                        backgroundColor: "#D8D8D8",
+                        padding: 7,
+                        borderTopLeftRadius: 6,
+                        borderBottomLeftRadius: 6,
+                      }}
+                    >
+                      <MaterialCommunityIcons
+                        name="minus"
+                        size={24}
+                        color={"black"}
+                      />
+                    </Pressable>
+                  ) : (
+                    <View
+                      style={{
+                        backgroundColor: "#D8D8D8",
+                        padding: 7,
+                        borderTopLeftRadius: 6,
+                        borderBottomLeftRadius: 6,
+                        opacity: 0.5, // Opacidade reduzida quando a quantidade é 1
+                      }}
+                    >
+                      <MaterialCommunityIcons
+                        name="minus"
+                        size={24}
+                        color={"black"}
+                      />
+                    </View>
+                  )}
                 </Pressable>
 
                 <Pressable
@@ -159,6 +199,7 @@ const CartScreen = () => {
               </View>
 
               <Pressable
+                onPress={() => deleteItem(item)}
                 style={{
                   backgroundColor: "white",
                   paddingHorizontal: 8,

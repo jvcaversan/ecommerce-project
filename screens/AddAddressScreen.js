@@ -1,8 +1,8 @@
 import { View, Text, ScrollView, Pressable } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import Header from "../components/Header";
 import { MaterialIcons, Entypo } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import axios from "axios";
 import { UserType } from "../UserContext";
 
@@ -27,6 +27,14 @@ const AddAddressScreen = () => {
       console.log("error", error);
     }
   };
+
+  // recarregar os enderecos quando o componente virar o foco da tela
+  useFocusEffect(
+    useCallback(() => {
+      fetchAddress();
+    }, [])
+  );
+
   console.log("address", address);
   return (
     <ScrollView
