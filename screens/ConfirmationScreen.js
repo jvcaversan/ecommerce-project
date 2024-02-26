@@ -32,6 +32,8 @@ const ConfirmationScreen = () => {
     }
   };
   const [selectAddress, setSelectAddress] = useState("");
+  const [option, setOption] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
   return (
     <ScrollView style={{ marginTop: 55 }}>
       <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 40 }}>
@@ -112,12 +114,12 @@ const ConfirmationScreen = () => {
                 }}
               >
                 {selectAddress && selectAddress._id === item?._id ? (
-                  <FontAwesome5 name="dot-circle" size={24} color="#008397" />
+                  <FontAwesome5 name="dot-circle" size={20} color="#008397" />
                 ) : (
                   <Entypo
                     onPress={() => setSelectAddress(item)}
                     name="circle"
-                    size={24}
+                    size={20}
                     color="gray"
                   />
                 )}
@@ -223,6 +225,133 @@ const ConfirmationScreen = () => {
           </Pressable>
         </View>
       )}
+
+      {currentStep == 1 && (
+        <View style={{ marginHorizontal: 20 }}>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            Escolha o método de entrega
+          </Text>
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: "white",
+              padding: 8,
+              gap: 7,
+              borderColor: "#D0D0D0",
+              borderWidth: 1,
+              marginTop: 10,
+            }}
+          >
+            {option ? (
+              <FontAwesome5 name="dot-circle" size={20} color="#008397" />
+            ) : (
+              <Entypo
+                onPress={() => setOption(!option)}
+                name="circle"
+                size={20}
+                color="gray"
+              />
+            )}
+
+            <Text style={{ flex: 1 }}>
+              <Text style={{ color: "green", fontWeight: 500 }}>
+                Amanhã até 18:00
+              </Text>{" "}
+              - Entrega GRÁTIS com o Amazon Prime
+            </Text>
+          </View>
+
+          <Pressable
+            onPress={() => setCurrentStep(2)}
+            style={{
+              backgroundColor: "#FFC72C",
+              padding: 10,
+              borderRadius: 20,
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 15,
+            }}
+          >
+            <Text>Continuar</Text>
+          </Pressable>
+        </View>
+      )}
+
+      {currentStep == 2 && (
+        <View style={{ marginHorizontal: 20 }}>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            Selecione o Método de Pagamento
+          </Text>
+
+          <View
+            style={{
+              backgroundColor: "white",
+              padding: 8,
+              borderColor: "#D0D0D0",
+              borderWidth: 1,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 7,
+              marginTop: 12,
+            }}
+          >
+            {selectedOption == "Card" ? (
+              <FontAwesome5 name="dot-circle" size={20} color="#008397" />
+            ) : (
+              <Entypo
+                onPress={() => setSelectedOption("Card")}
+                name="circle"
+                size={20}
+                color="gray"
+              />
+            )}
+            <Text>Cartão de Crédito / Débito</Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: "white",
+              padding: 8,
+              borderColor: "#D0D0D0",
+              borderWidth: 1,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 7,
+              marginTop: 12,
+            }}
+          >
+            {selectedOption == "Pix" ? (
+              <FontAwesome5 name="dot-circle" size={20} color="#008397" />
+            ) : (
+              <Entypo
+                onPress={() => setSelectedOption("Pix")}
+                name="circle"
+                size={20}
+                color="gray"
+              />
+            )}
+            <Text>Pix</Text>
+          </View>
+          <Pressable
+            onPress={() => setCurrentStep(3)}
+            style={{
+              backgroundColor: "#FFC72C",
+              padding: 10,
+              borderRadius: 20,
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 15,
+            }}
+          >
+            <Text>Continuar</Text>
+          </Pressable>
+        </View>
+      )}
+
+      {/* {currentStep == 3 && (
+
+      )} */}
     </ScrollView>
   );
 };
