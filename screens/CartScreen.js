@@ -68,6 +68,7 @@ const CartScreen = () => {
       <View style={{ marginHorizontal: 10 }}>
         {cart?.map((item, index) => (
           <View
+            key={index}
             style={{
               backgroundColor: "white",
               marginVertical: 10,
