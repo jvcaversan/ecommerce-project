@@ -3,9 +3,12 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { UserType } from "../UserContext";
 import { Entypo, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { cleanCart } from "../redux/CartReducer";
+import { useNavigation } from "@react-navigation/native";
 
 const ConfirmationScreen = () => {
+  const navigation = useNavigation();
   const steps = [
     { title: "Endereço", content: "Address Form" },
     { title: "Tipo de Entrega", content: "Delivery Options" },
@@ -15,6 +18,12 @@ const ConfirmationScreen = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [address, setAddress] = useState([]);
   const { userId, setUserId } = useContext(UserType);
+  const cart = useSelector((state) => state.cart.cart);
+  console.log(cart);
+
+  const total = cart
+    ?.map((item) => item.price * item.quantity)
+    .reduce((curr, prev) => curr + prev, 0);
 
   useEffect(() => {
     fetchAddress();
@@ -32,16 +41,37 @@ const ConfirmationScreen = () => {
       console.log("error", error);
     }
   };
+  const dispatch = useDispatch();
   const [selectAddress, setSelectAddress] = useState("");
   const [option, setOption] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
 
-  const cart = useSelector((state) => state.cart.cart);
-  console.log(cart);
+  const handlePlaceOrder = async () => {
+    try {
+      const orderData = {
+        userId: userId,
+        cartItems: cart,
+        totalPrice: total,
+        shippingAddress: selectAddress,
+        paymentMethod: selectedOption,
+      };
 
-  const total = cart
-    ?.map((item) => item.price * item.quantity)
-    .reduce((curr, prev) => curr + prev, 0);
+      const response = await axios.post(
+        "http://localhost:8000/pedidos",
+        orderData
+      );
+      if (response.status == 200) {
+        navigation.navigate("OrderScreen");
+        dispatch(cleanCart());
+        console.log("order created successfully", response.data.order);
+      } else {
+        console.log("error", response.data);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return (
     <ScrollView style={{ marginTop: 55 }}>
       <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 40 }}>
@@ -466,6 +496,7 @@ const ConfirmationScreen = () => {
           </View>
 
           <Pressable
+            onPress={handlePlaceOrder}
             style={{
               backgroundColor: "#FFC72C",
               padding: 10,

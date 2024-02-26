@@ -20,7 +20,7 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true,
       },
-      images: {
+      image: {
         type: String,
         required: true,
       },
@@ -40,19 +40,19 @@ const orderSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    houseNo: {
+    fullAddress: {
       type: String,
       required: true,
     },
-    street: {
+    city: {
       type: String,
       required: true,
     },
-    landmark: {
+    state: {
       type: String,
       required: true,
     },
-    postalCode: {
+    zipcode: {
       type: String,
       required: true,
     },

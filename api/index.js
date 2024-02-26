@@ -206,7 +206,7 @@ app.post("/pedidos", async (req, res) => {
 
     //criar um array de objetos dos itens do carrinho
     const products = cartItems.map((item) => ({
-      name: item?.name,
+      name: item?.title,
       quantity: item?.quantity,
       price: item?.price,
       image: item?.image,
@@ -226,6 +226,7 @@ app.post("/pedidos", async (req, res) => {
 
     res.status(200).json({ message: "Pedido criado com sucesso" });
   } catch (error) {
+    console.error("erro pedido", error);
     res.status(500).json({ message: "Erro ao tentar criar os pedidos" });
   }
 });
