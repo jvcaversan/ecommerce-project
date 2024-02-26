@@ -139,6 +139,7 @@ const ConfirmationScreen = () => {
           <Pressable>
             {address.map((item, index) => (
               <Pressable
+                key={index}
                 style={{
                   borderWidth: 1,
                   borderColor: "#D0D0D0",
