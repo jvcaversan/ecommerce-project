@@ -44,7 +44,6 @@ const StackNavigator = () => {
             tabBarLabel: "Profile",
             tabBarLabelStyle: ({ focused }) =>
               focused ? { color: "#008E97" } : { color: "black" },
-            headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
                 <Ionicons name="person" size={24} color="#008E97" />
