@@ -2,7 +2,8 @@ import { View, Text, ScrollView, Pressable } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { UserType } from "../UserContext";
-import { Entypo, FontAwesome5 } from "@expo/vector-icons";
+import { Entypo, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 
 const ConfirmationScreen = () => {
   const steps = [
@@ -34,6 +35,13 @@ const ConfirmationScreen = () => {
   const [selectAddress, setSelectAddress] = useState("");
   const [option, setOption] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
+
+  const cart = useSelector((state) => state.cart.cart);
+  console.log(cart);
+
+  const total = cart
+    ?.map((item) => item.price * item.quantity)
+    .reduce((curr, prev) => curr + prev, 0);
   return (
     <ScrollView style={{ marginTop: 55 }}>
       <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 40 }}>
@@ -349,9 +357,128 @@ const ConfirmationScreen = () => {
         </View>
       )}
 
-      {/* {currentStep == 3 && (
+      {currentStep === 3 && selectedOption === "Pix" && (
+        <View style={{ marginHorizontal: 20 }}>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            Comprar Agora
+          </Text>
 
-      )} */}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 8,
+              backgroundColor: "white",
+              padding: 8,
+              borderColor: "#D0D0D0",
+              borderWidth: 1,
+              marginTop: 10,
+            }}
+          >
+            <View>
+              <Text style={{ fontSize: 17, fontWeight: "bold" }}>
+                Desconto de 5%
+              </Text>
+              <Text style={{ fontSize: 15, color: "gray", marginTop: 5 }}>
+                Ative as entregas automáticas
+              </Text>
+            </View>
+            <MaterialIcons
+              name="keyboard-arrow-right"
+              size={24}
+              color="black"
+            />
+          </View>
+
+          <View
+            style={{
+              backgroundColor: "white",
+              padding: 8,
+              borderColor: "#D0D0D0",
+              borderWidth: 1,
+              marginTop: 10,
+            }}
+          >
+            <Text>Entregar para {selectAddress.name}</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginTop: 8,
+              }}
+            >
+              <Text style={{ fontSize: 16, fontWeight: 500, color: "gray" }}>
+                Items:
+              </Text>
+              <Text style={{ color: "gray", fontSize: 16 }}>R${total}</Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginTop: 8,
+              }}
+            >
+              <Text style={{ fontSize: 16, fontWeight: 500, color: "gray" }}>
+                Frete:
+              </Text>
+              <Text style={{ color: "gray", fontSize: 16 }}>Gratuito</Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginTop: 8,
+              }}
+            >
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                Valor Total:
+              </Text>
+              <Text
+                style={{ color: "#C60C30", fontSize: 17, fontWeight: "bold" }}
+              >
+                R${total}
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              backgroundColor: "white",
+              padding: 8,
+              borderColor: "#D0D0D0",
+              borderWidth: 1,
+              marginTop: 10,
+            }}
+          >
+            <Text style={{ fontSize: 16, color: "gray" }}>
+              Método de Pagamento
+            </Text>
+            <Text style={{ fontSize: 16, fontWeight: 600, marginTop: 7 }}>
+              Pix
+            </Text>
+          </View>
+
+          <Pressable
+            style={{
+              backgroundColor: "#FFC72C",
+              padding: 10,
+              borderRadius: 20,
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 20,
+            }}
+          >
+            <Text>Realizar Pedido</Text>
+          </Pressable>
+        </View>
+      )}
     </ScrollView>
   );
 };
